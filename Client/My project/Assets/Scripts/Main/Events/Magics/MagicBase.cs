@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public abstract class MagicBase : EventBase
 {
@@ -8,6 +9,8 @@ public abstract class MagicBase : EventBase
     protected int maxCooldown;
     protected int life;
     protected Rigidbody rigid;
+    protected bool active;
+    public string id;
 
     public void CoolDonw(){
         if(0 < cooldown){
@@ -19,6 +22,11 @@ public abstract class MagicBase : EventBase
     }
     public void SetCoolDown(){
         cooldown = maxCooldown;
-        Debug.Log(cooldown);
+    }
+
+    protected IEnumerator DelayCoroutine(float seconds, UnityAction callback)
+    {
+        yield return new WaitForSeconds(seconds);
+        callback?.Invoke();
     }
 }

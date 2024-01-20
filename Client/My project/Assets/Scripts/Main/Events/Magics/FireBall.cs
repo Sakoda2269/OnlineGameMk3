@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FireBall : MagicBase
 {
+
+    Vector3 dir;
+    [SerializeField] private ParticleSystem particle;
 
     public FireBall(){
         maxCooldown = 50;
@@ -13,6 +17,9 @@ public class FireBall : MagicBase
     {
         life = 100;
         rigid = this.GetComponent<Rigidbody>();
+        dir = this.transform.forward;
+        rigid.AddForce(75 * dir, ForceMode.Impulse);
+        active = true;
     }
 
     // Update is called once per frame
@@ -24,12 +31,31 @@ public class FireBall : MagicBase
     void FixedUpdate(){
         if(life > 0) life--;
         if(life == 0){
-            Destroy(this.gameObject);
+            Remove();
         }
-        rigid.AddForce(200 * this.transform.forward);
+        // rigid.AddForce(100 * dir);
     }
 
     override public string GetName(){
         return "fireball";
-    }   
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if(active){
+            if(collision.gameObject.tag.Equals("Untagged")){
+                Remove();
+            }
+        }
+        
+    }
+
+
+    void Remove(){
+        active = false;
+        particle.Stop();
+        StartCoroutine(DelayCoroutine(2.0f, () =>{
+            Destroy(this.gameObject);
+        }));
+    }
 }

@@ -7,8 +7,9 @@ using Newtonsoft.Json;
 public class Player : Entity
 {
 
-    MagicBase[] magics = new MagicBase[10];
+    MagicBase[] magics = new MagicBase[6];
     int select = 0;
+    public GameObject hotBar;
 
     public GameObject head;
 
@@ -21,14 +22,27 @@ public class Player : Entity
     // Update is called once per frame
     void Update()
     {
-        
+        float wh = Input.GetAxis("Mouse ScrollWheel");
+        if(wh < 0){
+            select += 1;
+            select %= 6;
+        }
+        if(wh > 0){
+            select -= 1;
+            if(select < 0){
+                select = 5;
+            }
+        }
+        hotBar.GetComponent<HotBar>().SelectBox(select);
     }
 
     void FixedUpdate(){
-        // foreach(MagicBase m in magics){
-        //     m.CoolDonw();
-        // }
-        magics[0].CoolDonw();
+        foreach(MagicBase m in magics){
+            if(m is MagicBase mm){
+                mm.CoolDonw();
+            }
+            
+        }
     }
 
     public void SetMagic(int i, MagicBase mb){
@@ -36,24 +50,24 @@ public class Player : Entity
     }
 
     public void OnClick(WebSocket ws){
-        MagicBase select_magic = magics[select];
-        if(select_magic.CanUse()){
-            Transform mytrans = magicRoot.transform;
-            Debug.Log(mytrans.eulerAngles);
-            SendData sendData;
-            sendData.method = "event";
-            sendData.id = id;
-            sendData.data = new Dictionary<string, string>{
-                {"name", select_magic.GetName()},
-                {"pos_x", mytrans.position.x.ToString()},
-                {"pos_y", mytrans.position.y.ToString()},
-                {"pos_z", mytrans.position.z.ToString()},
-                {"rot_x", mytrans.eulerAngles.x.ToString()},
-                {"rot_y", mytrans.eulerAngles.y.ToString()},
-                {"rot_z", mytrans.eulerAngles.z.ToString()}
-            };
-            ws.SendText(JsonConvert.SerializeObject(sendData));
-            select_magic.SetCoolDown();
+        if(magics[select] is MagicBase select_magic){
+            if(select_magic.CanUse()){
+                Transform mytrans = magicRoot.transform;
+                SendData sendData;
+                sendData.method = "event";
+                sendData.id = id;
+                sendData.data = new Dictionary<string, string>{
+                    {"name", select_magic.GetName()},
+                    {"pos_x", mytrans.position.x.ToString()},
+                    {"pos_y", mytrans.position.y.ToString()},
+                    {"pos_z", mytrans.position.z.ToString()},
+                    {"rot_x", mytrans.eulerAngles.x.ToString()},
+                    {"rot_y", mytrans.eulerAngles.y.ToString()},
+                    {"rot_z", mytrans.eulerAngles.z.ToString()}
+                };
+                ws.SendText(JsonConvert.SerializeObject(sendData));
+                select_magic.SetCoolDown();
+            }
         }
     }
 

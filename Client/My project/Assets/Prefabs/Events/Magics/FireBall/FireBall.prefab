@@ -4823,7 +4823,8 @@ GameObject:
   - component: {fileID: 378789589788134064}
   - component: {fileID: 9048076786824025522}
   - component: {fileID: 2208373963940450311}
-  m_Layer: 0
+  - component: {fileID: 8267905018832923126}
+  m_Layer: 11
   m_Name: FireBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4858,6 +4859,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60769c6ce4ac8834a94c0c160411d1a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 
+  particle: {fileID: 6554590296000224203}
 --- !u!54 &2208373963940450311
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4872,5 +4875,18 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  m_Constraints: 80
+  m_CollisionDetection: 2
+--- !u!135 &8267905018832923126
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5719159620666636406}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.2
+  m_Center: {x: 0, y: 0, z: 0}

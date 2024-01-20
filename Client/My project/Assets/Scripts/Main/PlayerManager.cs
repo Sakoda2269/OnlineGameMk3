@@ -18,6 +18,8 @@ public class PlayerManager : MonoBehaviour
 
     public Player myPlayer;
 
+    [SerializeField] GameObject hotBar;
+
     public struct IdPos{
         public string id;
         public Vector3 pos;
@@ -102,6 +104,7 @@ public class PlayerManager : MonoBehaviour
                 players[tmp[0]] = Instantiate(player, new Vector3(0, 0, 0), Quaternion.identity);
                 players[tmp[0]].GetComponent<Player>().id = tmp[0];
                 myPlayer = players[tmp[0]].GetComponent<Player>();
+                myPlayer.hotBar = hotBar;
                 myPlayer.SetMagic(0, this.GetComponent<EventManager>().GetMagic(1));
             }
             if(tmp[1].Equals("enemy")){
