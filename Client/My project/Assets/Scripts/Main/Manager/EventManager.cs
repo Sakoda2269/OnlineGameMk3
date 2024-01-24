@@ -15,8 +15,8 @@ public class EventManager : MonoBehaviour
         foreach(GameObject obj in events){
             eventDict[obj.GetComponent<EventBase>().GetName()] = obj;
         }
-        magics.Add(new TestMagic());
         magics.Add(new FireBall());
+        magics.Add(new Leap());
 
     }
 
@@ -38,8 +38,10 @@ public class EventManager : MonoBehaviour
         float rx = float.Parse(data["data"]["rot"]["x"].ToString());
         float ry = float.Parse(data["data"]["rot"]["y"].ToString());
         float rz = float.Parse(data["data"]["rot"]["z"].ToString());
+        string id = data["id"].ToString();
         if(eventDict.ContainsKey(name)){
-            Instantiate(eventDict[name], new Vector3(x, y, z), Quaternion.Euler(rx, ry, rz));
+            GameObject tmp = Instantiate(eventDict[name], new Vector3(x, y, z), Quaternion.Euler(rx, ry, rz));
+            tmp.GetComponent<EventBase>().userId = id;
         }
     }
 

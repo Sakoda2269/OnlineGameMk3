@@ -8,6 +8,8 @@ public class Entity : MonoBehaviour
 
     public string id;
     protected Animator anim;
+    protected int maxHP;
+    protected int HP;
 
     public GameObject magicRoot;
 

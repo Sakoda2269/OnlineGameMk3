@@ -18,7 +18,7 @@ public class ChangeAllChildrenTag : MonoBehaviour
     static void GetChildren(Transform transform)
     {
         // 新しく設定するタグ
-        string newTag = "Player";
+        string newTag = "Enemy";
  
         // タグを設定
         transform.tag = newTag;

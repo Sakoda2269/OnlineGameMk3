@@ -35,7 +35,6 @@ public class Enemy : Entity
 
     public void setHead(Vector3 head){
         Transform myTrans = this.head.transform;
-        Debug.Log(head);
         myTrans.eulerAngles = head;
     }
 

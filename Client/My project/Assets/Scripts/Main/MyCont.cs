@@ -67,7 +67,7 @@ namespace StarterAssets
         public float TopClamp = 70.0f;
 
         [Tooltip("How far in degrees can you move the camera down")]
-        public float BottomClamp = -30.0f;
+        public float BottomClamp = -70.0f;
 
         [Tooltip("Additional degress to override the camera. Useful for fine tuning camera position when locked")]
         public float CameraAngleOverride = 0.0f;
@@ -105,6 +105,8 @@ namespace StarterAssets
         private CharacterController _controller;
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
+        private Rigidbody rb;
+        private Vector3 moveDir;
 
         private const float _threshold = 0.01f;
 
@@ -139,6 +141,7 @@ namespace StarterAssets
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
+            rb = GetComponent<Rigidbody>();
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
             _playerInput = GetComponent<PlayerInput>();
 #else
@@ -281,6 +284,15 @@ namespace StarterAssets
             // move the player
             _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            // Debug.Log(rb.velocity + 5 * targetDirection.normalized);
+            // if((rb.velocity + 5 * targetDirection.normalized).magnitude < 10){
+            //     rb.AddForce(targetDirection.normalized);
+            //     moveDir = rb.velocity;
+            // }else{
+            //     rb.velocity = moveDir;
+            // }
+            
+
 
             // update animator if using character
             if (_hasAnimator)

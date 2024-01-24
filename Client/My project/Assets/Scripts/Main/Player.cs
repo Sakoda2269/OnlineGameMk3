@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using NativeWebSocket;
 using Newtonsoft.Json; 
+using UnityEngine.UI;
 
 public class Player : Entity
 {
@@ -10,13 +11,38 @@ public class Player : Entity
     MagicBase[] magics = new MagicBase[6];
     int select = 0;
     public GameObject hotBar;
+    public Slider hpSlider;
+    public Slider mpSlider;
 
     public GameObject head;
+    public GameObject player;
+
+    int maxMp;
+    int mp;
+
+    int mpHealTime = 100;
+    int maxMpHealTime = 100;
 
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
+        maxHP = 100;
+        HP = 100;
+        maxMp = 100;
+        mp = 100;
+    }
+
+    public void Init(){
+        for(int i = 0; i < magics.Length; i++){
+            if(magics[i] is MagicBase m){
+                Texture2D texture = m.GetTexture();
+                Debug.Log(texture);
+                hotBar.GetComponent<HotBar>().boxes[i].GetComponent<Box>().panel.GetComponent<Image>().sprite = Sprite.Create(
+                    texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero
+                );
+            }
+        }
     }
 
     // Update is called once per frame
@@ -34,14 +60,22 @@ public class Player : Entity
             }
         }
         hotBar.GetComponent<HotBar>().SelectBox(select);
+        // GetComponent<Rigidbody>().AddForce(new Vector3(0, 10000, 0));
     }
 
     void FixedUpdate(){
-        foreach(MagicBase m in magics){
-            if(m is MagicBase mm){
-                mm.CoolDonw();
+        for(int i = 0; i < magics.Length; i++){
+            if(magics[i] is MagicBase m){
+                m.CoolDown();
+                hotBar.GetComponent<HotBar>().SetCoolTime(i, m.CulcNextUse());
             }
-            
+        }
+        hpSlider.value = (float)HP / (float)maxHP;
+        mpSlider.value = (float)mp / (float)maxMp;
+        if(mpHealTime > 0){
+            mpHealTime -= 1;
+        }else if(mp < maxMp){
+            mp += 1;
         }
     }
 
@@ -49,24 +83,17 @@ public class Player : Entity
         magics[i] = mb;
     }
 
+    public void Damage(int damage, string enemyId){
+        HP -= damage;
+    }
+
     public void OnClick(WebSocket ws){
         if(magics[select] is MagicBase select_magic){
-            if(select_magic.CanUse()){
-                Transform mytrans = magicRoot.transform;
-                SendData sendData;
-                sendData.method = "event";
-                sendData.id = id;
-                sendData.data = new Dictionary<string, string>{
-                    {"name", select_magic.GetName()},
-                    {"pos_x", mytrans.position.x.ToString()},
-                    {"pos_y", mytrans.position.y.ToString()},
-                    {"pos_z", mytrans.position.z.ToString()},
-                    {"rot_x", mytrans.eulerAngles.x.ToString()},
-                    {"rot_y", mytrans.eulerAngles.y.ToString()},
-                    {"rot_z", mytrans.eulerAngles.z.ToString()}
-                };
-                ws.SendText(JsonConvert.SerializeObject(sendData));
+            if(select_magic.CanUse() && mp >= select_magic.mp){
+                select_magic.Use(player, ws);
                 select_magic.SetCoolDown();
+                mp -= select_magic.mp;
+                mpHealTime = maxMpHealTime;
             }
         }
     }

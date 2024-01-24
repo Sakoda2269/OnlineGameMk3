@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json.Linq;
+using UnityEngine.UI;
 
 using NativeWebSocket;
 
@@ -19,6 +20,8 @@ public class PlayerManager : MonoBehaviour
     public Player myPlayer;
 
     [SerializeField] GameObject hotBar;
+    [SerializeField] Slider hpSlider;
+    [SerializeField] Slider mpSlider;
 
     public struct IdPos{
         public string id;
@@ -105,7 +108,11 @@ public class PlayerManager : MonoBehaviour
                 players[tmp[0]].GetComponent<Player>().id = tmp[0];
                 myPlayer = players[tmp[0]].GetComponent<Player>();
                 myPlayer.hotBar = hotBar;
-                myPlayer.SetMagic(0, this.GetComponent<EventManager>().GetMagic(1));
+                myPlayer.hpSlider = hpSlider;
+                myPlayer.mpSlider = mpSlider;
+                myPlayer.SetMagic(0, this.GetComponent<EventManager>().GetMagic(0));
+                myPlayer.SetMagic(1, this.GetComponent<EventManager>().GetMagic(1));
+                myPlayer.Init();
             }
             if(tmp[1].Equals("enemy")){
                 players[tmp[0]] = Instantiate(enemy, new Vector3(0, 0, 0), Quaternion.identity);

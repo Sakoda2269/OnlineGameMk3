@@ -18,6 +18,10 @@ public class HotBar : MonoBehaviour
         
     }
 
+    public void SetCoolTime(int index, float nextUse){
+        boxes[index].GetComponent<Box>().SetCoolTime(nextUse);
+    }
+
     public void SelectBox(int index){
         for(int i = 0; i < 6; i++){
             boxes[i].GetComponent<Box>().selected = false;
