@@ -17,7 +17,8 @@ public class Leap : MagicBase
     }
 
     override public void Use(GameObject user, WebSocket ws){
-        user.GetComponent<Rigidbody>().AddForce(100 * new Vector3(0, 1, 0), ForceMode.Impulse);
+        // user.GetComponent<Rigidbody>().AddForce(10 * new Vector3(0, 1, 0), ForceMode.Impulse);
+        user.GetComponent<CharacterController>().Move(1.5f * user.GetComponent<Player>().magicRoot.transform.forward);
     }
 
     // Start is called before the first frame update
