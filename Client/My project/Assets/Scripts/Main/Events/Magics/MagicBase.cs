@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using UnityEngine.AddressableAssets;
 using NativeWebSocket;
 using Newtonsoft.Json;
 
@@ -15,22 +14,8 @@ public abstract class MagicBase : EventBase
     protected Rigidbody rigid;
     protected bool active;
     protected int damage;
-    public Texture2D texture;
     public int mp;
 
-    #if UNITY_EDITOR
-        private readonly string DATAPATH = "Assets/Images/";
-    #else
-        private string DATAPATH = $"{Application.dataPath}/Images/";
-    #endif
-
-
-    public Texture2D GetTexture(){
-        var rawData = System.IO.File.ReadAllBytes(DATAPATH + GetName() + ".png");
-        Texture2D texture2D = new Texture2D(0, 0);
-        texture2D.LoadImage(rawData);
-        return texture2D;
-    }
 
     public void CoolDown(){
         if(0 < cooldown){

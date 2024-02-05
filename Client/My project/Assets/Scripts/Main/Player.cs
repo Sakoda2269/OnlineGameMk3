@@ -13,6 +13,7 @@ public class Player : Entity
     public GameObject hotBar;
     public Slider hpSlider;
     public Slider mpSlider;
+    public GameObject healBox;
 
     public GameObject head;
     public GameObject player;
@@ -22,6 +23,10 @@ public class Player : Entity
 
     int mpHealTime = 100;
     int maxMpHealTime = 100;
+
+    int healCoolDown = 0;
+    int maxHealCoolDown = 100;
+    int healing = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -36,13 +41,10 @@ public class Player : Entity
     public void Init(){
         for(int i = 0; i < magics.Length; i++){
             if(magics[i] is MagicBase m){
-                Texture2D texture = m.GetTexture();
-                Debug.Log(texture);
-                hotBar.GetComponent<HotBar>().boxes[i].GetComponent<Box>().panel.GetComponent<Image>().sprite = Sprite.Create(
-                    texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero
-                );
+                hotBar.GetComponent<HotBar>().boxes[i].GetComponent<Box>().SetTexture(m.GetName());
             }
         }
+        healBox.GetComponent<Box>().SetTexture("heal");
     }
 
     // Update is called once per frame
@@ -60,7 +62,10 @@ public class Player : Entity
             }
         }
         hotBar.GetComponent<HotBar>().SelectBox(select);
-        // GetComponent<Rigidbody>().AddForce(new Vector3(0, 10000, 0));
+        if(Input.GetKey(KeyCode.V) &&  healCoolDown == 0){
+            healing = 30;
+            healCoolDown = maxHealCoolDown;
+        }
     }
 
     void FixedUpdate(){
@@ -68,6 +73,18 @@ public class Player : Entity
             if(magics[i] is MagicBase m){
                 m.CoolDown();
                 hotBar.GetComponent<HotBar>().SetCoolTime(i, m.CulcNextUse());
+            }
+        }
+        if(healCoolDown > 0){
+            healCoolDown -= 1;
+        }
+        healBox.GetComponent<Box>().SetCoolTime((float)healCoolDown / maxHealCoolDown);
+
+        if(healing > 0){
+            HP += 1;
+            healing -= 1;
+            if(HP > maxHP){
+                HP = maxHP;
             }
         }
         hpSlider.value = (float)HP / (float)maxHP;

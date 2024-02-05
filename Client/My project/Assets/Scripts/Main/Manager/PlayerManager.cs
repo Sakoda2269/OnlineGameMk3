@@ -22,6 +22,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] GameObject hotBar;
     [SerializeField] Slider hpSlider;
     [SerializeField] Slider mpSlider;
+    [SerializeField] GameObject healBox;
 
     public struct IdPos{
         public string id;
@@ -110,6 +111,7 @@ public class PlayerManager : MonoBehaviour
                 myPlayer.hotBar = hotBar;
                 myPlayer.hpSlider = hpSlider;
                 myPlayer.mpSlider = mpSlider;
+                myPlayer.healBox = healBox;
                 myPlayer.SetMagic(0, this.GetComponent<EventManager>().GetMagic(0));
                 myPlayer.SetMagic(1, this.GetComponent<EventManager>().GetMagic(1));
                 myPlayer.Init();

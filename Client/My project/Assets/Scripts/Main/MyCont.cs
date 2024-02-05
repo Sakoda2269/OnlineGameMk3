@@ -253,12 +253,6 @@ namespace StarterAssets
 
             rb.AddForce(10 * (targetSpeed * moveVector - moveVelocity));
 
-            // float factor = 0;
-            // factor = (targetSpeed * moveVector.magnitude - moveVelocity.magnitude) / Time.fixedDeltaTime;
-            // Debug.Log(moveVelocity.magnitude);
-
-            // rb.AddForce(moveVector * factor);
-
             // update animator if using character
             if (_hasAnimator)
             {
