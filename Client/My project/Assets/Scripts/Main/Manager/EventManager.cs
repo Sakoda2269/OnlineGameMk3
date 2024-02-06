@@ -17,6 +17,7 @@ public class EventManager : MonoBehaviour
         }
         magics.Add(new FireBall());
         magics.Add(new Leap());
+        magics.Add(new Wall());
 
     }
 
@@ -40,6 +41,7 @@ public class EventManager : MonoBehaviour
         float rz = float.Parse(data["data"]["rot"]["z"].ToString());
         string id = data["id"].ToString();
         if(eventDict.ContainsKey(name)){
+            Debug.Log(name);
             GameObject tmp = Instantiate(eventDict[name], new Vector3(x, y, z), Quaternion.Euler(rx, ry, rz));
             tmp.GetComponent<EventBase>().userId = id;
         }

@@ -56,7 +56,6 @@ public class FireBall : MagicBase
         if(life == 0){
             Remove();
         }
-        // rigid.AddForce(100 * dir);
     }
 
     override public string GetName(){

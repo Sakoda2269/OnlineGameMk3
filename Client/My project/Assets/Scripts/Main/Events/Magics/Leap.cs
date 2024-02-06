@@ -18,7 +18,8 @@ public class Leap : MagicBase
 
     override public void Use(GameObject user, WebSocket ws){
         Vector3 forward = user.GetComponent<Player>().magicRoot.transform.forward;
-        Vector3 moveVector = new Vector3(12 * forward.x, 4 * forward.y, 12 * forward.z);
+        user.GetComponent<StarterAssets.MyCont>().leaping = true;
+        Vector3 moveVector = new Vector3(forward.x, forward.y, forward.z);
         moveVector.Normalize(); 
         user.GetComponent<Rigidbody>().AddForce(30f * moveVector, ForceMode.Impulse);
     }

@@ -605,6 +605,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   events:
   - {fileID: 5719159620666636406, guid: ace049377a6ded44eb6d23c0eda87a10, type: 3}
+  - {fileID: 5920802271265171839, guid: 00824cb597d2de44abc202a5d804e9ec, type: 3}
   magics: []
 --- !u!1 &1028513131
 GameObject:

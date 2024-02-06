@@ -8,9 +8,9 @@ using UnityEngine.InputSystem;
 
 namespace StarterAssets
 {
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-    [RequireComponent(typeof(PlayerInput))]
-#endif
+    #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+        [RequireComponent(typeof(PlayerInput))]
+    #endif
     public class MyCont : MonoBehaviour
     {
         [Header("Player")]
@@ -95,9 +95,9 @@ namespace StarterAssets
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
 
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-        private PlayerInput _playerInput;
-#endif
+        #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+            private PlayerInput _playerInput;
+        #endif
         private Animator _animator;
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
@@ -112,13 +112,15 @@ namespace StarterAssets
         {
             get
             {
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-                return _playerInput.currentControlScheme == "KeyboardMouse";
-#else
-				return false;
-#endif
+                #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+                    return _playerInput.currentControlScheme == "KeyboardMouse";
+                #else
+				    return false;
+                #endif
             }
         }
+
+        public bool leaping;
 
 
         private void Awake()
@@ -137,11 +139,11 @@ namespace StarterAssets
             _hasAnimator = TryGetComponent(out _animator);
             _input = GetComponent<StarterAssetsInputs>();
             rb = GetComponent<Rigidbody>();
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-            _playerInput = GetComponent<PlayerInput>();
-#else
-			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
-#endif
+            #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+                _playerInput = GetComponent<PlayerInput>();
+            #else
+			    Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
+            #endif
 
             AssignAnimationIDs();
 
@@ -179,18 +181,16 @@ namespace StarterAssets
 
         private void GroundedCheck()
         {
-            // set sphere position, with offset
             Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
                 transform.position.z);
             Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
                 QueryTriggerInteraction.Ignore);
             if(!Grounded){
                 rb.AddForce(0, -11, 0);
+            }else{
+                leaping = false;
             }
-
-            // update animator if using character
-            if (_hasAnimator)
-            {
+            if(_hasAnimator){
                 _animator.SetBool(_animIDGrounded, Grounded);
             }
         }
@@ -234,24 +234,36 @@ namespace StarterAssets
             // rotate to face input direction relative to camera position
             transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
 
+
             Vector3 moveVector = new Vector3(0, 0, 0);
+            bool moving = false;
+
 
             if(_input.move.y > 0){
                 moveVector += transform.forward;
+                moving = true;
             }else if(_input.move.y < 0){
                 moveVector -= transform.forward;
+                moving = true;
             }
             if(_input.move.x > 0){
                 moveVector += transform.right;
+                moving = true;
             }else if(_input.move.x < 0){
                 moveVector -= transform.right;
+                moving = true;
             }
             if(moveVector.magnitude > 1){
                 moveVector.Normalize();
             }
             Vector3 moveVelocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-
-            rb.AddForce(10 * (targetSpeed * moveVector - moveVelocity));
+            if(leaping){
+                rb.AddForce(8 * moveVector);
+            }
+            else if(moving || Grounded){
+                rb.AddForce(10 * (targetSpeed * moveVector - moveVelocity));
+            }
+            
 
             // update animator if using character
             if (_hasAnimator)

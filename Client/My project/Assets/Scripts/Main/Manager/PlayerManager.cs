@@ -114,6 +114,7 @@ public class PlayerManager : MonoBehaviour
                 myPlayer.healBox = healBox;
                 myPlayer.SetMagic(0, this.GetComponent<EventManager>().GetMagic(0));
                 myPlayer.SetMagic(1, this.GetComponent<EventManager>().GetMagic(1));
+                myPlayer.SetMagic(2, this.GetComponent<EventManager>().GetMagic(2));
                 myPlayer.Init();
             }
             if(tmp[1].Equals("enemy")){

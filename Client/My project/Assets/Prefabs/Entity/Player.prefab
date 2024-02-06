@@ -2566,8 +2566,8 @@ GameObject:
   - component: {fileID: 8615276814664528564}
   - component: {fileID: 5400242337702926121}
   - component: {fileID: 9083403993332770315}
-  - component: {fileID: -3975320167902140595}
   - component: {fileID: 2672643315057781307}
+  - component: {fileID: 8771843281363275152}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -2650,6 +2650,7 @@ MonoBehaviour:
   BottomClamp: -70
   CameraAngleOverride: 0
   LockCameraPosition: 0
+  leaping: 0
 --- !u!114 &3886498166665916363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2802,9 +2803,24 @@ MonoBehaviour:
   hotBar: {fileID: 0}
   hpSlider: {fileID: 0}
   mpSlider: {fileID: 0}
+  healBox: {fileID: 0}
   head: {fileID: 6102055487168293457}
   player: {fileID: 8742097224135710786}
---- !u!54 &-3975320167902140595
+--- !u!136 &2672643315057781307
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8742097224135710786}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.28
+  m_Height: 1.8
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.93, z: 0}
+--- !u!54 &8771843281363275152
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2820,20 +2836,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!136 &2672643315057781307
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8742097224135710786}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.28
-  m_Height: 1.8
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.93, z: 0}
 --- !u!1 &8949164862696529232
 GameObject:
   m_ObjectHideFlags: 0
