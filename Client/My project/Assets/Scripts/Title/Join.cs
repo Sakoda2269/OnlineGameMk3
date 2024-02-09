@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System;
 using Newtonsoft.Json.Linq;
+using UnityEditor;
 
 using UnityEngine.SceneManagement;
 
@@ -19,20 +20,27 @@ public class Join : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        string path = Application.dataPath + "/Protected/address.json";
-        if(File.Exists(path) is true){
-            try{
-                using(var stream = new FileStream(path, FileMode.Open)){
-                    using(var sr = new StreamReader(stream)){
-                        JObject message = JObject.Parse(sr.ReadToEnd());
-                        publicAddress = message["public"].ToString();
-                        privateAddress = message["private"].ToString();
+        #if UNITY_EDITOR
+            string path = Application.dataPath + "/Protected/address.json";
+            if(File.Exists(path) is true){
+                try{
+                    using(var stream = new FileStream(path, FileMode.Open)){
+                        using(var sr = new StreamReader(stream)){
+                            JObject message = JObject.Parse(sr.ReadToEnd());
+                            publicAddress = message["public"].ToString();
+                            privateAddress = message["private"].ToString();
+                        }
                     }
+                }catch(Exception ex){
+                    Debug.Log(ex);
                 }
-            }catch(Exception ex){
-                Debug.Log(ex);
             }
-        }
+        #else
+            Debug.Log(Application.absoluteURL);
+            string url = Application.absoluteURL.Replace("http://", "");
+            publicAddress = url;
+            privateAddress = url;
+        #endif
     }
 
     // Update is called once per frame

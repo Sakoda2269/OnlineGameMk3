@@ -18,8 +18,7 @@ public class Manager : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         string address = Join.address;
-        Debug.Log(address);
-        ws = new WebSocket("ws://" + address + "/ws/game/room1");
+        ws = new WebSocket("ws://" + address + "ws/game/room1");
         pm = this.gameObject.GetComponent<PlayerManager>();
         em = this.gameObject.GetComponent<EventManager>();
         ws.OnOpen += () => {

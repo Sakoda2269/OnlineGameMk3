@@ -11,7 +11,7 @@ public class Box : MonoBehaviour
     public GameObject panel;
     public bool selected; 
 
-    private string URI = "http://localhost:8000/image/";
+    string address = Join.address;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +22,7 @@ public class Box : MonoBehaviour
     }
 
     IEnumerator GetTex(string name){
+        string URI = "http://" + address + "image/";
         UnityWebRequest www = UnityWebRequestTexture.GetTexture(URI + name + "/");
         Debug.Log("dk;jlfds");
         yield return www.SendWebRequest();
